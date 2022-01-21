@@ -1,5 +1,5 @@
 
-function NavBar({ stockitems }) {
+function ShoppingCart({ stockitems }) {
     const [cart, setCart] = React.useState([]);
     const [stock, setStock] = React.useState(stockitems);
     const { Button } = ReactBootstrap;
@@ -27,10 +27,25 @@ function NavBar({ stockitems }) {
         </Button>
       );
     });
+
+    const removeFromCart = ((e, cart) => {
+        let deletedItemIndex = e.target.getAttribute("value");
+        const removedItemCart = cart.filter((item,index) => index != deletedItemIndex)
+        setCart(removedItemCart);
+
+        let deletedItem = e.target.innerHTML;
+        console.log(deletedItem);
+        const updatedStock = stock.map(item => {
+            if(item.name === deletedItem) item.instock++;
+            return item;
+        });
+       setStock(updatedStock);
+
+    });
   
     const updatedCart = cart.map((item, index) => {
       return (
-        <Button key={index}>{item}</Button>
+        <Button onClick={e => removeFromCart(e, cart)} value={index} key={index}>{item}</Button>
       );
     });
 
@@ -42,7 +57,7 @@ function NavBar({ stockitems }) {
       </>
     );
   }
-  const menuItems = [
+  const produce = [
     { name: "apple", instock: 2 },
     { name: "pineapple", instock: 3 },
     { name: "pear", instock: 0 },
@@ -50,7 +65,7 @@ function NavBar({ stockitems }) {
     { name: "orange", instock: 1 }
   ];
   ReactDOM.render(
-    <NavBar stockitems={menuItems} />,
+    <ShoppingCart stockitems={produce} />,
     document.getElementById("root")
   );
   
